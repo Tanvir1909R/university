@@ -1,9 +1,9 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import envConfig from "../../envConfig";
 import { generateUserId } from "../../utils/user.utils";
 import Users from "./user.schema";
 
-export const createUser = async (req: Request, res: Response) => {
+export const createUser = async (req: Request, res: Response,next:NextFunction) => {
   try {
     const user = req.body;
     const newId = await generateUserId();
@@ -18,9 +18,6 @@ export const createUser = async (req: Request, res: Response) => {
         data:result
     })
   } catch (error) {
-    res.status(400).json({
-      success: false,
-      message: "Failed to create user",
-    });
+    next(error)
   }
 };

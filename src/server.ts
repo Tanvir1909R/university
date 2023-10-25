@@ -1,7 +1,6 @@
 import mongoose from 'mongoose'
 import app from './app';
 import envConfig from './envConfig';
-import logger from './logger';
 
 mongoose.connect(`${envConfig.database_url}`)
 .then(()=>{

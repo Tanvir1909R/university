@@ -19,7 +19,8 @@ const userSchema = new Schema<iUser>({
     },
     password:{
         type:String,
-        unique:true
+        unique:true,
+        required:true
     }
 },{timestamps:true})
 
