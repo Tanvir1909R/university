@@ -11,7 +11,6 @@ type UserModel = Model<iUser, object>;
 const userSchema = new Schema<iUser>({
     id:{
         type:String,
-        required:true,
         unique:true
     },
     role:{
@@ -20,7 +19,6 @@ const userSchema = new Schema<iUser>({
     },
     password:{
         type:String,
-        required:true,
         unique:true
     }
 },{timestamps:true})
