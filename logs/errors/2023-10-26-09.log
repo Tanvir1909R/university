@@ -1,0 +1,1 @@
+{"level":"error","message":"Invalid scheme, expected connection string to start with \"mongodb://\" or \"mongodb+srv://\""}

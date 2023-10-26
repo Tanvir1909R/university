@@ -1,14 +1,15 @@
 import mongoose from 'mongoose'
 import app from './app';
 import envConfig from './envConfig';
+import { errorLogger, logger } from './logger';
 
 mongoose.connect(`${envConfig.database_url}`)
 .then(()=>{
-    console.log('database connect');
+    logger.info('database connect');
     app.listen(5000,()=>{
-        console.log('server start at 5000');
+        logger.info('server start at 5000');
     })
 })
 .catch(er=>{
-    console.log(er.message);
+    errorLogger.error(er.message);
 })

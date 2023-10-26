@@ -1,0 +1,15 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 14
+    },
+    "auditLog": "D:\\p2\\next lavel web dev\\university\\logs\\errors\\.2bb365c654d9de2283b6d38c395199212c29dfa2-audit.json",
+    "files": [
+        {
+            "date": 1698291816028,
+            "name": "D:\\p2\\next lavel web dev\\university\\logs\\errors\\2023-10-26-09.log",
+            "hash": "83dd4a5e8da97024d529ae2af4b055f87ddf3e61d642aaeb5ed8f744513ad8a6"
+        }
+    ],
+    "hashType": "sha256"
+}

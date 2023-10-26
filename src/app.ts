@@ -2,6 +2,7 @@ import express, { Application, Request, Response } from 'express'
 import cors from 'cors'
 import userRoute from './modules/users/user.route'
 import globalErrorHandler from './middlewares/globalErrorHandler'
+import apiError from './errors/apiError'
 
 const app:Application = express()
 
