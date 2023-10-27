@@ -3,51 +3,60 @@ import envConfig from "../envConfig";
 import handleValidationError from "../errors/handleValidationError";
 import mongoose from "mongoose";
 import apiError from "../errors/apiError";
+import config from "../envConfig/index";
+import { errorLogger } from "../logger";
 
-
-interface iGenericError{
-    path:string,
-    message:string
+interface iGenericError {
+  path: string;
+  message: string;
 }
 
-const globalErrorHandler: ErrorRequestHandler = (err, req,res, next)=>{
-    let statusCode = 500;
-    let message = "something went wrong";
-    let errorMessages:iGenericError[] = [];
+const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
+  config.env === "development"
+    ? console.log("global-dep-log", err)
+    : errorLogger.error(err);
 
+  let statusCode = 500;
+  let message = "something went wrong";
+  let errorMessages: iGenericError[] = [];
 
-    if(err?.name === 'ValidationError'){
-        const resError = handleValidationError(err as mongoose.Error.ValidationError);
-        statusCode = resError.statusCode;
-        message = resError.message;
-        errorMessages = resError.errorMessages
-    }else if(err instanceof apiError){
-        statusCode = err?.statusCode;
-        message = err?.message;
-        errorMessages = err?.message ? [
-            {
-                path:'',
-                message: err?.message
-            }
-        ] : [];
-    }
-    else if(err instanceof Error){
-        message = err?.message;
-        errorMessages = err?.message ? [
-            {
-                path:'',
-                message: err?.message
-            }
-        ] : [];
-    }
-    res.status(statusCode).json({
-        success:false,
-        message,
-        errorMessages,
-        stack:envConfig.env !== "production" ? err.stack : undefined
-    })
+  if (err?.name === "ValidationError") {
+    const resError = handleValidationError(
+      err as mongoose.Error.ValidationError
+    );
+    statusCode = resError.statusCode;
+    message = resError.message;
+    errorMessages = resError.errorMessages;
+  } else if (err instanceof apiError) {
+    statusCode = err?.statusCode;
+    message = err?.message;
+    errorMessages = err?.message
+      ? [
+          {
+            path: "",
+            message: err?.message,
+          },
+        ]
+      : [];
+  } else if (err instanceof Error) {
+    message = err?.message;
+    errorMessages = err?.message
+      ? [
+          {
+            path: "",
+            message: err?.message,
+          },
+        ]
+      : [];
+  }
+  res.status(statusCode).json({
+    success: false,
+    message,
+    errorMessages,
+    stack: envConfig.env !== "production" ? err.stack : undefined,
+  });
 
-    next()
-}
+  next();
+};
 
-export default globalErrorHandler
+export default globalErrorHandler;

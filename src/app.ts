@@ -11,8 +11,9 @@ app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 
 
-app.get('/',(req:Request,res:Response)=>{
+app.get('/',async (req:Request,res:Response)=>{
     res.send('welcome to the server');
+    // Promise.reject()
 })
 
 
