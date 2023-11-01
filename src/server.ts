@@ -3,10 +3,15 @@ import app from "./app";
 import envConfig from "./envConfig";
 import { errorLogger, logger } from "./logger";
 import { Server } from "http";
-import { log } from "winston";
+
+
+process.on('uncaughtException',err=>{
+  errorLogger.error('uncaught exception');
+  process.exit(1)
+})
+
 
 let server: Server;
-
 mongoose
   .connect(`${envConfig.database_url}`)
   .then(() => {
@@ -31,3 +36,11 @@ process.on("unhandledRejection", (err) => {
     process.exit(1);
   }
 });
+
+
+process.on('SIGTERM',()=>{
+  logger.info('sigterm received')
+  if(server){
+    server.close()
+  }
+})

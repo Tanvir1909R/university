@@ -5,9 +5,11 @@ import mongoose from "mongoose";
 import apiError from "../errors/apiError";
 import config from "../envConfig/index";
 import { errorLogger } from "../logger";
+import { ZodError } from "zod";
+import handleZodError from "../errors/handleZodError";
 
 interface iGenericError {
-  path: string;
+  path: string | number;
   message: string;
 }
 
@@ -27,7 +29,12 @@ const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
     statusCode = resError.statusCode;
     message = resError.message;
     errorMessages = resError.errorMessages;
-  } else if (err instanceof apiError) {
+  }else if(err instanceof ZodError){
+    const resError = handleZodError(err)
+    statusCode = resError.statusCode;
+    message = resError.message;
+    errorMessages = resError.errorMessages;
+  }else if (err instanceof apiError) {
     statusCode = err?.statusCode;
     message = err?.message;
     errorMessages = err?.message
