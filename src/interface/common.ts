@@ -6,3 +6,10 @@ export interface iErrorResponse{
         message:string
     }[]
 }
+
+export interface iPagination{
+    page?:number,
+    limit?:number,
+    sortBy?:string,
+    sortOrder?:"asc" | "desc"
+}

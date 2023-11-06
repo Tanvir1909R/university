@@ -1,8 +1,9 @@
-import express, { Application, Request, Response } from 'express'
+import express, { Application, NextFunction, Request, Response } from 'express'
 import cors from 'cors'
 import globalErrorHandler from './middlewares/globalErrorHandler'
 import userRoute from './modules/users/user.route'
 import academicRoute from './modules/academicSemester/academic.route'
+import httpStatus from 'http-status'
 
 const app:Application = express()
 
@@ -24,5 +25,20 @@ app.use('/academic',academicRoute)
 
 // error handler
 app.use(globalErrorHandler)
+
+// handle not found error
+app.use((req:Request,res:Response,next:NextFunction)=>{
+    res.status(httpStatus.NOT_FOUND).json({
+        success:false,
+        message:"Not found",
+        errorMessage:[
+            {
+                Path:req.originalUrl,
+                message:"Route not found"
+            }
+        ]
+    })
+    next()
+})
 
 export default app
