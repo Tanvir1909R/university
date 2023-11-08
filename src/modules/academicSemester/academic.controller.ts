@@ -5,6 +5,8 @@ import httpStatus from "http-status";
 import { iPagination } from "../../interface/common";
 import pick from "../../pick";
 import { filterFields } from "../../utils/common";
+import { SortOrder } from "mongoose";
+import calculatePagination from "../../helper/pagination.helper";
 
 const academicTitleCode: {
   [key: string]: string;
@@ -38,8 +40,26 @@ export const createAcademicSemester: RequestHandler = async (
 export const getAcademicSemester: RequestHandler = async (req, res, next) => {
   try {
     const paginationOption = pick(req.query, filterFields)
-    console.log(paginationOption);
-    res.json({success:true})
+    const {page,limit,skip,sortBy,sortOrder} = calculatePagination(paginationOption);
+    const sortCondition:{[key:string]:SortOrder} = {};
+
+    if(sortBy && sortOrder){
+      sortCondition[sortBy] = sortOrder
+    }
+
+    const result  = await AcademicSemester.find({}).sort(sortCondition).skip(skip).limit(limit)
+    const total = await AcademicSemester.countDocuments()
+    
+    res.status(httpStatus.OK).json({
+      success:true,
+      message:'data get successfully',
+      data:result,
+      meta:{
+        page:page,
+        limit:limit,
+        total:total
+      }
+    })
     
   } catch (error) {
     next(error);

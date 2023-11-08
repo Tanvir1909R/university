@@ -38,7 +38,6 @@ const academicSemesterSchema = new Schema(
     code: {
       type: String,
       require: true,
-      unique: true,
       enum:['01', '02', '03']
     },
     year: {
