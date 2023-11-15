@@ -39,28 +39,50 @@ export const createAcademicSemester: RequestHandler = async (
 
 export const getAcademicSemester: RequestHandler = async (req, res, next) => {
   try {
-    const paginationOption = pick(req.query, filterFields)
-    const {page,limit,skip,sortBy,sortOrder} = calculatePagination(paginationOption);
-    const sortCondition:{[key:string]:SortOrder} = {};
+    // searching
+    const { searchTerm,...filterData } = pick(req.query, ["searchTerm","title","code"]);
+    console.log(filterData);
+    
+    const findCondition = [
+      {
+        $or:[
+          {title:{$regex:searchTerm,$options:'i'}},
+          {code:{$regex:searchTerm,$options:'i'}},
+        ]
+      },
+      {
+        $and:[
+          {title:filterData.title},
+          {code:filterData.code}
+        ]
+      }
+    ];
 
-    if(sortBy && sortOrder){
-      sortCondition[sortBy] = sortOrder
+    // pagination
+    const paginationOption = pick(req.query, filterFields);
+    const { page, limit, skip, sortBy, sortOrder } =
+      calculatePagination(paginationOption);
+    const sortCondition: { [key: string]: SortOrder } = {};
+    if (sortBy && sortOrder) {
+      sortCondition[sortBy] = sortOrder;
     }
 
-    const result  = await AcademicSemester.find({}).sort(sortCondition).skip(skip).limit(limit)
-    const total = await AcademicSemester.countDocuments()
-    
+    const result = await AcademicSemester.find({ $and: findCondition })
+      .sort(sortCondition)
+      .skip(skip)
+      .limit(limit);
+    const total = await AcademicSemester.countDocuments();
+
     res.status(httpStatus.OK).json({
-      success:true,
-      message:'data get successfully',
-      data:result,
-      meta:{
-        page:page,
-        limit:limit,
-        total:total
-      }
-    })
-    
+      success: true,
+      message: "data get successfully",
+      data: result,
+      meta: {
+        page: page,
+        limit: limit,
+        total: total,
+      },
+    });
   } catch (error) {
     next(error);
   }
