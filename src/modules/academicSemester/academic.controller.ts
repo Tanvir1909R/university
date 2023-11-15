@@ -41,23 +41,26 @@ export const getAcademicSemester: RequestHandler = async (req, res, next) => {
   try {
     // searching
     const { searchTerm,...filterData } = pick(req.query, ["searchTerm","title","code"]);
-    console.log(filterData);
-    
-    const findCondition = [
-      {
-        $or:[
-          {title:{$regex:searchTerm,$options:'i'}},
-          {code:{$regex:searchTerm,$options:'i'}},
-        ]
-      },
-      {
-        $and:[
-          {title:filterData.title},
-          {code:filterData.code}
-        ]
-      }
-    ];
-
+    const searchAbleField = ["title","code"]
+    const andCondition = [];
+    if(searchTerm){
+      andCondition.push({
+        $or: searchAbleField.map((field)=>({
+          [field]:{
+            $regex:searchTerm,
+            $options:'i'
+          }
+        }))
+      })
+    }
+    if(Object.keys(filterData).length){
+      andCondition.push({
+        $and:Object.entries(filterData).map(([field, value])=>({
+          [field]:value
+        }))
+      })
+    }
+    const findCondition = andCondition.length > 0 ? { $and: andCondition } : {}
     // pagination
     const paginationOption = pick(req.query, filterFields);
     const { page, limit, skip, sortBy, sortOrder } =
@@ -67,7 +70,7 @@ export const getAcademicSemester: RequestHandler = async (req, res, next) => {
       sortCondition[sortBy] = sortOrder;
     }
 
-    const result = await AcademicSemester.find({ $and: findCondition })
+    const result = await AcademicSemester.find(findCondition)
       .sort(sortCondition)
       .skip(skip)
       .limit(limit);
