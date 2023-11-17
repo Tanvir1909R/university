@@ -123,3 +123,16 @@ export const updateAcademicSemester:RequestHandler = async(req,res,next)=>{
     next(error)
   }
 }
+export const deleteAcademicSemester:RequestHandler = async(req,res,next)=>{
+  try {
+      const id = req.params.id;
+      const result = await AcademicSemester.findOneAndDelete({_id:id})
+      res.status(200).json({
+        success: true,
+        message: "Academic semester deleted successfully",
+        data: result,
+      });
+  } catch (error) {
+    next(error)
+  }
+}
