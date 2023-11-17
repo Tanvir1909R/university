@@ -7,6 +7,7 @@ import config from "../envConfig/index";
 import { errorLogger } from "../logger";
 import { ZodError } from "zod";
 import handleZodError from "../errors/handleZodError";
+import handleCastError from "../errors/handleCastError";
 
 interface iGenericError {
   path: string | number;
@@ -31,6 +32,11 @@ const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
     errorMessages = resError.errorMessages;
   }else if(err instanceof ZodError){
     const resError = handleZodError(err)
+    statusCode = resError.statusCode;
+    message = resError.message;
+    errorMessages = resError.errorMessages;
+  }else if(err?.name === 'CastError'){
+    const resError = handleCastError(err)
     statusCode = resError.statusCode;
     message = resError.message;
     errorMessages = resError.errorMessages;

@@ -90,3 +90,36 @@ export const getAcademicSemester: RequestHandler = async (req, res, next) => {
     next(error);
   }
 };
+
+
+export const getSingleSemester: RequestHandler = async(req,res,next)=>{
+  try {
+      const id = req.params.id;
+      const result = await AcademicSemester.findById(id);
+      res.status(200).json({
+        success: true,
+        message: "Academic semester get successfully",
+        data: result,
+      });
+  } catch (error) {
+    next(error)
+  }
+}
+
+export const updateAcademicSemester:RequestHandler = async(req,res,next)=>{
+  try {
+      const id = req.params.id;
+      const payload = req.body;
+      if (academicTitleCode[payload.title] !== payload.code) {
+        throw new apiError(httpStatus.BAD_REQUEST, "Invalid semester code");
+      }
+      const result = await AcademicSemester.findOneAndUpdate({_id:id},payload,{new:true})
+      res.status(200).json({
+        success: true,
+        message: "Academic semester update successfully",
+        data: result,
+      });
+  } catch (error) {
+    next(error)
+  }
+}
