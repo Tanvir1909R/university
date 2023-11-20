@@ -40,14 +40,14 @@ export const createAcademicSemester: RequestHandler = async (
 export const getAcademicSemester: RequestHandler = async (req, res, next) => {
   try {
     // searching
-    const { searchTerm,...filterData } = pick(req.query, ["searchTerm","title","code"]);
+    const { search,...filterData } = pick(req.query, ["search","title","code"]);
     const searchAbleField = ["title","code"]
     const andCondition = [];
-    if(searchTerm){
+    if(search){
       andCondition.push({
         $or: searchAbleField.map((field)=>({
           [field]:{
-            $regex:searchTerm,
+            $regex:search,
             $options:'i'
           }
         }))
