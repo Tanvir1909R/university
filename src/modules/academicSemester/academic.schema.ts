@@ -55,7 +55,12 @@ const academicSemesterSchema = new Schema(
       enum:month
     },
   },
-  { timestamps: true }
+  {
+    timestamps:true,
+    toJSON:{
+        virtuals:true
+    }
+}
 );
 
 // handle same year and academic semester

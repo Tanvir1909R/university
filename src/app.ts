@@ -4,6 +4,7 @@ import globalErrorHandler from './middlewares/globalErrorHandler'
 import userRoute from './modules/users/user.route'
 import academicRoute from './modules/academicSemester/academic.route'
 import academicFacultyRoute from './modules/academicFaculty/faculty.route'
+import academicDepartmentRoute from './modules/academicDepartment/department.route'
 import httpStatus from 'http-status'
 
 const app:Application = express()
@@ -22,6 +23,7 @@ app.get('/',async (req:Request,res:Response)=>{
 app.use('/user',userRoute);
 app.use('/academic',academicRoute)
 app.use('/faculty',academicFacultyRoute)
+app.use('/department',academicDepartmentRoute)
 
 
 

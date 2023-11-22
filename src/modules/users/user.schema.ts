@@ -22,7 +22,12 @@ const userSchema = new Schema<iUser>({
         unique:true,
         required:true
     }
-},{timestamps:true})
+},{
+    timestamps:true,
+    toJSON:{
+        virtuals:true
+    }
+})
 
 const Users = model<iUser, UserModel>('users',userSchema)
 
