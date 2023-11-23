@@ -1,13 +1,33 @@
 import Users from "../modules/users/user.schema"
 
-export const findLastUserId = async()=>{
-    const lastUser = await Users.findOne({},{id:1,_id:0}).sort({createdAt:-1}).lean();
-    return lastUser?.id
+// student----
+type iAcademicSemester={
+    code:string,
+    year:string
+}
+
+export const findLastStudentId = async():Promise<string |undefined > =>{
+    const lastStudent = await Users.findOne({},{id:1,_id:0}).sort({createdAt:-1}).lean();
+    return lastStudent?.id ? lastStudent.id.substring(4) : undefined;
+}
+
+export const generateStudentId = async(academicSemester:iAcademicSemester)=>{
+    const currentId = (await findLastStudentId()) || (0).toString().padStart(5,'0')
+    let incId = (parseInt(currentId) + 1).toString().padStart(5,'0')
+    incId = `${academicSemester.year.substring(2)}${academicSemester.code}${incId}`
+    return incId
 }
 
 
-export const generateUserId = async()=>{
-    const currentId = (await findLastUserId()) || (0).toString().padStart(5,'0')
-    const incId = (parseInt(currentId) + 1).toString().padStart(5,'0')
+// faculty--------
+export const findLastFacultyId = async():Promise<string |undefined > =>{
+    const lastFaculty = await Users.findOne({role:'faculty'},{id:1,_id:0}).sort({createdAt:-1}).lean();
+    return lastFaculty?.id ? lastFaculty.id.substring(2) : undefined
+}
+
+export const generateFacultyId = async(academicSemester:iAcademicSemester):Promise<string> =>{
+    const currentId = (await findLastFacultyId()) || (0).toString().padStart(5,'0')
+    let incId = (parseInt(currentId) + 1).toString().padStart(5,'0')
+    incId = `F-${incId}`
     return incId
 }
