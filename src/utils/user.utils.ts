@@ -11,10 +11,10 @@ export const findLastStudentId = async():Promise<string |undefined > =>{
     return lastStudent?.id ? lastStudent.id.substring(4) : undefined;
 }
 
-export const generateStudentId = async(academicSemester:iAcademicSemester)=>{
+export const generateStudentId = async(academicSemester:iAcademicSemester | null)=>{
     const currentId = (await findLastStudentId()) || (0).toString().padStart(5,'0')
     let incId = (parseInt(currentId) + 1).toString().padStart(5,'0')
-    incId = `${academicSemester.year.substring(2)}${academicSemester.code}${incId}`
+    incId = `${academicSemester?.year.substring(2)}${academicSemester?.code}${incId}`
     return incId
 }
 

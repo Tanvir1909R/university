@@ -1,10 +1,10 @@
 import  express  from "express"
-import { createUser } from "./user.controller"
+import { createsStudent } from "./user.controller"
 import validateRequest from "../../middlewares/validateRequest"
-import createUserZodSchema from "./user.validation"
+import { createStudentZodSchema } from "./user.validation"
 const route = express.Router()
 
-route.post('/create', validateRequest(createUserZodSchema) , createUser)
+route.post('/create-student', validateRequest(createStudentZodSchema) , createsStudent)
 
 
 export default route

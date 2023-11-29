@@ -5,7 +5,7 @@ export const academicZodSchema = z.object({
     title: z.enum(["autumn", "summer", "fall"], {
       required_error: "Title is required",
     }),
-    year: z.number({
+    year: z.string({
       required_error: "Year is required",
     }),
     code: z.enum(["01", "02", "03"], {
@@ -58,7 +58,7 @@ export const updateAcademicZodSchema = z
       title: z.enum(["autumn", "summer", "fall"], {
         required_error: "Title is required",
       }).optional(),
-      year: z.number({
+      year: z.string({
         required_error: "Year is required",
       }).optional(),
       code: z.enum(["01", "02", "03"], {

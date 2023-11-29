@@ -6,11 +6,6 @@
     "auditLog": "D:\\p2\\next lavel web dev\\university\\logs\\errors\\.2bb365c654d9de2283b6d38c395199212c29dfa2-audit.json",
     "files": [
         {
-            "date": 1699557223148,
-            "name": "D:\\p2\\next lavel web dev\\university\\logs\\errors\\2023-11-10-01.log",
-            "hash": "3eb4932aa9ba251146f84d7a8613cdd0cdc9d36ab7bbbf4aaf35a471fec3576b"
-        },
-        {
             "date": 1700059714797,
             "name": "D:\\p2\\next lavel web dev\\university\\logs\\errors\\2023-11-15-20.log",
             "hash": "db669de412a7c65e916c9327d7c82d2c9f1dbd30ef35465ad990f62a764c229b"
@@ -74,6 +69,16 @@
             "date": 1700763454956,
             "name": "D:\\p2\\next lavel web dev\\university\\logs\\errors\\2023-11-24-00.log",
             "hash": "6fccdc401b38a602005756e280bf0c1d5565eb45afffc3eb7919fd7009f44f51"
+        },
+        {
+            "date": 1701186646963,
+            "name": "D:\\p2\\next lavel web dev\\university\\logs\\errors\\2023-11-28-21.log",
+            "hash": "69be359e01572076e5f774eddc9237e760ff9d7452bc7ae64b03bcb67a3a78d0"
+        },
+        {
+            "date": 1701267894673,
+            "name": "D:\\p2\\next lavel web dev\\university\\logs\\errors\\2023-11-29-20.log",
+            "hash": "bac124b4cd1250cd09cb6add3d2f22ed27b6d03a5c46e1cf470292f7c2a23a67"
         }
     ],
     "hashType": "sha256"

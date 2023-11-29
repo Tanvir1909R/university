@@ -21,7 +21,7 @@ const month = ['January', 'February', 'March', 'April', 'May', 'June', 'July', '
 interface iAcademic {
   title: "autumn" | "summer" | "fall";
   code: "01" | "02" | "03";
-  year: number;
+  year: string;
   startMonth: Month;
   endMonth: Month;
 }
@@ -41,7 +41,7 @@ const academicSemesterSchema = new Schema(
       enum:['01', '02', '03']
     },
     year: {
-      type: Number,
+      type: String,
       require: true,
     },
     startMonth: {
