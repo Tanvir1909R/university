@@ -20,7 +20,7 @@ export const createsStudent: RequestHandler = async (req, res, next) => {
     let newUserAllData = null;
     try {
       session.startTransaction();
-      const generateId = generateStudentId(academicSemester);
+      const generateId = await generateStudentId(academicSemester);
       user.id = generateId;
       student.id = generateId;
       const newStudent = await Students.create([student], { session });
@@ -30,8 +30,8 @@ export const createsStudent: RequestHandler = async (req, res, next) => {
           "failed to create a student"
         );
       }
-      const newUser = await Users.create([user], { session });
       user.student = newStudent[0]._id;
+      const newUser = await Users.create([user], { session });
       newUserAllData = newUser[0];
       if (!newUser.length) {
         throw new apiError(httpStatus.BAD_REQUEST, "failed to create user");
@@ -46,11 +46,11 @@ export const createsStudent: RequestHandler = async (req, res, next) => {
 
     if (newUserAllData) {
       newUserAllData = await Users.findOne({ id: newUserAllData.id }).populate({
-        path: "students",
+        path: "student",
         populate: [
-          { path: "academicSemesters" },
-          { path: "academicDepartments" },
-          { path: "academicFaculties" },
+          { path: "semester" },
+          { path: "department" },
+          { path: "faculty" },
         ],
       });
     }

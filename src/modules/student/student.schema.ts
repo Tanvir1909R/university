@@ -1,4 +1,4 @@
-import { InferSchemaType, Schema, model } from "mongoose";
+import { Schema, model } from "mongoose";
 
 export type iStudent = {
   id: string;
@@ -34,6 +34,7 @@ export type iStudent = {
   semester: string,
   department: string,
   faculty: string,
+  [key:string]:any // index signature if i have to use Object.keys or objectName[key] 
 };
 
 const studentSchema = new Schema(
