@@ -1,12 +1,13 @@
 import {Model, Schema,Types,model} from 'mongoose'
 import { iStudent } from '../student/student.schema';
+import { iFaculty } from '../faculty/faculty.schema';
 
 export interface iUser{
     id:string,
     role:string,
     password:string,
     student?:Types.ObjectId | iStudent,
-    faculty?:Types.ObjectId,
+    faculty?:Types.ObjectId | iFaculty,
     admin?:Types.ObjectId
 }
 

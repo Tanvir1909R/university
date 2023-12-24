@@ -31,13 +31,13 @@ export type iStudent = {
       address: string,
   };
   profileImg?: string,
-  semester: string,
-  department: string,
-  faculty: string,
+  semester: Schema.Types.ObjectId,
+  department: Schema.Types.ObjectId,
+  faculty: Schema.Types.ObjectId,
   [key:string]:any // index signature if i have to use Object.keys or objectName[key] 
 };
 
-const studentSchema = new Schema(
+const studentSchema = new Schema<iStudent>(
   {
     id: {
       type: String,

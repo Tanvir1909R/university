@@ -64,3 +64,12 @@ export const createsStudent: RequestHandler = async (req, res, next) => {
     next(error);
   }
 };
+
+export const createFaculty: RequestHandler = async (req, res, next) => {
+  try {
+
+
+  } catch (error) {
+    next(error);
+  }
+};
