@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const createFacultyZobSchema = z.object({
+export const facultyValidationZobSchema = z.object({
     body:z.object({
         
     })

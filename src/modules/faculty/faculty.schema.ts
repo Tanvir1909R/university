@@ -10,7 +10,7 @@ export interface iFaculty {
   email: string;
   contactNo: string;
   emergencyContactNo: string;
-  gender: string;
+  gender: "male" | "female";
   permanentAddress: string;
   presentAddress: string;
   bloodGroup?: "A+" | "B+" | "AB+" | "O+" | "A-" | "B-" | "AB-" | "O-";

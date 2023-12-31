@@ -25,7 +25,7 @@ export const findLastFacultyId = async():Promise<string |undefined > =>{
     return lastFaculty?.id ? lastFaculty.id.substring(2) : undefined
 }
 
-export const generateFacultyId = async(academicSemester:iAcademicSemester):Promise<string> =>{
+export const generateFacultyId = async():Promise<string> =>{
     const currentId = (await findLastFacultyId()) || (0).toString().padStart(5,'0')
     let incId = (parseInt(currentId) + 1).toString().padStart(5,'0')
     incId = `F-${incId}`
