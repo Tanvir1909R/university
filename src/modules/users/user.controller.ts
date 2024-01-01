@@ -68,13 +68,15 @@ export const createsStudent: RequestHandler = async (req, res, next) => {
 
 export const createFaculty: RequestHandler = async (req, res, next) => {
   try {
-    const {faculty, user} = req.body;
+    const {faculty, ...user} = req.body;
+    console.log(user);
+    
     user.role = 'faculty';
     let userAllData = null;0
     const session = await startSession();
     try {
         session.startTransaction()
-        const generateId = generateFacultyId()
+        const generateId = await generateFacultyId()
         user.id = generateId;
         faculty.id = generateId;
         const newFaculty = await Faculty.create([faculty],{session});

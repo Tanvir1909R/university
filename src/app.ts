@@ -6,6 +6,7 @@ import academicRoute from './modules/academicSemester/academic.route'
 import academicFacultyRoute from './modules/academicFaculty/faculty.route'
 import academicDepartmentRoute from './modules/academicDepartment/department.route'
 import studentRoute from './modules/student/student.route'
+import facultyRoute from './modules/faculty/faculty.route'
 import httpStatus from 'http-status'
 
 const app:Application = express()
@@ -26,6 +27,7 @@ app.use('/student',studentRoute )
 app.use('/academic',academicRoute)
 app.use('/faculty',academicFacultyRoute)
 app.use('/department',academicDepartmentRoute)
+app.use('/faculty-user', facultyRoute)
 
 
 

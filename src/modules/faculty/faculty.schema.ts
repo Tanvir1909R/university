@@ -1,24 +1,24 @@
 import { Schema, model } from "mongoose";
 
 export interface iFaculty {
-  id: string;
+  id: string,
   name: {
     firstName: string;
     lastName: string;
-  };
-  dateOfBirth: string;
-  email: string;
-  contactNo: string;
-  emergencyContactNo: string;
-  gender: "male" | "female";
-  permanentAddress: string;
-  presentAddress: string;
-  bloodGroup?: "A+" | "B+" | "AB+" | "O+" | "A-" | "B-" | "AB-" | "O-";
-  designation: string;
-  department: Schema.Types.ObjectId;
-  faculty: Schema.Types.ObjectId;
-  profileImage?: string;
-  // [key:string]:any // index
+  },
+  dateOfBirth: string,
+  email: string,
+  contactNo: string,
+  emergencyContactNo: string,
+  gender: "male" | "female",
+  permanentAddress: string,
+  presentAddress: string,
+  bloodGroup?: "A+" | "B+" | "AB+" | "O+" | "A-" | "B-" | "AB-" | "O-",
+  designation: string,
+  department: Schema.Types.ObjectId,
+  faculty: Schema.Types.ObjectId,
+  profileImage?: string,
+  [key:string]:any // index
 }
 
 const facultySchema = new Schema<iFaculty>({
