@@ -1,6 +1,7 @@
 import {Model, Schema,Types,model} from 'mongoose'
 import { iStudent } from '../student/student.schema';
 import { iFaculty } from '../faculty/faculty.schema';
+import { iAdmin } from '../admin/admin.schema';
 
 export interface iUser{
     id:string,
@@ -8,7 +9,7 @@ export interface iUser{
     password:string,
     student?:Types.ObjectId | iStudent,
     faculty?:Types.ObjectId | iFaculty,
-    admin?:Types.ObjectId
+    admin?:Types.ObjectId   | iAdmin
 }
 
 type UserModel = Model<iUser, object>;
@@ -35,10 +36,10 @@ const userSchema = new Schema<iUser>({
         type:Schema.Types.ObjectId,
         ref:'faculties',
     },
-    // admin:{
-    //     type:Schema.Types.ObjectId,
-    //     ref:'admins',
-    // }
+    admin:{
+        type:Schema.Types.ObjectId,
+        ref:'admins',
+    }
 },{
     timestamps:true,
 })

@@ -1,13 +1,14 @@
 import { RequestHandler } from "express";
 import envConfig from "../../envConfig";
 import Users from "./user.schema";
-import { generateFacultyId, generateStudentId } from "../../utils/user.utils";
+import { generateAdminId, generateFacultyId, generateStudentId } from "../../utils/user.utils";
 import { AcademicSemester } from "../academicSemester/academic.schema";
 import mongoose, { startSession } from "mongoose";
 import { Students } from "../student/student.schema";
 import apiError from "../../errors/apiError";
 import httpStatus from "http-status";
 import { Faculty } from "../faculty/faculty.schema";
+import { Admin } from "../admin/admin.schema";
 
 export const createsStudent: RequestHandler = async (req, res, next) => {
   try {
@@ -69,10 +70,9 @@ export const createsStudent: RequestHandler = async (req, res, next) => {
 export const createFaculty: RequestHandler = async (req, res, next) => {
   try {
     const {faculty, ...user} = req.body;
-    console.log(user);
     
     user.role = 'faculty';
-    let userAllData = null;0
+    let userAllData = null;
     const session = await startSession();
     try {
         session.startTransaction()
@@ -103,6 +103,54 @@ export const createFaculty: RequestHandler = async (req, res, next) => {
         populate:[
           {path:"department"},
           {path:'faculty'}
+        ]
+      })
+    }
+    res.status(200).json({
+      success: true,
+      message: "created successfully",
+      data: userAllData,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const createAdmin: RequestHandler = async (req, res, next) => {
+  try {
+    const {admin, ...user} = req.body;
+    
+    user.role = 'admin';
+    let userAllData = null;
+    const session = await startSession();
+    try {
+        session.startTransaction()
+        const generateId = await generateAdminId()
+        user.id = generateId;
+        admin.id = generateId;
+        const newAdmin = await Admin.create([admin],{session});
+        if(!newAdmin.length){
+          throw new apiError(httpStatus.BAD_REQUEST,'fail to create faculty')
+        }
+        user.admin = newAdmin[0]._id;
+        const newUser = await Users.create([user],{session})
+        userAllData = newUser[0];
+        if(!newUser.length){
+          throw new apiError(httpStatus.BAD_REQUEST,"fail to create user")
+        } 
+
+        await session.commitTransaction();
+        await session.endSession()
+    } catch (error) {
+      await session.abortTransaction();
+      await session.endSession()
+      throw error
+    }
+    if(userAllData){
+      userAllData = await Users.findOne({id: userAllData.id}).populate({
+        path:"admin",
+        populate:[
+          {path:"managingDepartment"}
         ]
       })
     }

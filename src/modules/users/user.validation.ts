@@ -103,3 +103,27 @@ export const createFacultyZodSchema = z.object({
     }),
   }),
 });
+export const createAdminZodSchema = z.object({
+  body: z.object({
+    password: z.string(),
+    faculty: z.object({
+      name: z.object({
+        firstName: z.string(),
+        lastName: z.string(),
+      }),
+      dateOfBirth: z.string(),
+      email: z.string().email(),
+      contactNo: z.string(),
+      emergencyContactNo: z.string(),
+      gender: z.enum(["male", "female"]),
+      permanentAddress: z.string(),
+      presentAddress: z.string(),
+      bloodGroup: z
+        .enum(["A+", "B+", "AB+", "O+", "A-", "B-", "AB-", "O-"])
+        .optional(),
+      designation: z.string(),
+      managingDepartment: z.string(),
+      profileImage: z.string().optional(),
+    }),
+  }),
+});
