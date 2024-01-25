@@ -7,6 +7,7 @@ import academicFacultyRoute from './modules/academicFaculty/faculty.route'
 import academicDepartmentRoute from './modules/academicDepartment/department.route'
 import studentRoute from './modules/student/student.route'
 import facultyRoute from './modules/faculty/faculty.route'
+import authRoute from './modules/auth/auth.route'
 import httpStatus from 'http-status'
 
 const app:Application = express()
@@ -28,7 +29,7 @@ app.use('/academic',academicRoute)
 app.use('/faculty',academicFacultyRoute)
 app.use('/department',academicDepartmentRoute)
 app.use('/faculty-user', facultyRoute)
-
+app.use('/auth', authRoute)
 
 
 // error handler

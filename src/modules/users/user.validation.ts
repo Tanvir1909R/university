@@ -106,7 +106,7 @@ export const createFacultyZodSchema = z.object({
 export const createAdminZodSchema = z.object({
   body: z.object({
     password: z.string(),
-    faculty: z.object({
+    admin: z.object({
       name: z.object({
         firstName: z.string(),
         lastName: z.string(),

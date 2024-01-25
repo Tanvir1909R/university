@@ -10,12 +10,10 @@ import httpStatus from "http-status";
 import { Faculty } from "../faculty/faculty.schema";
 import { Admin } from "../admin/admin.schema";
 
+
 export const createsStudent: RequestHandler = async (req, res, next) => {
   try {
     const { student, ...user } = req.body;
-    if (!user.password) {
-      user.password = envConfig.default_pass as string;
-    }
     user.role = "student";
     const academicSemester = await AcademicSemester.findById(student.semester);
     const session = await mongoose.startSession();
