@@ -7,12 +7,13 @@ import bcrypt from 'bcrypt'
 export const loginUser: RequestHandler = async (req, res, next) => {
   try {
     const {id,password} = req.body;
-    const isExist = await Users.findOne({id},{id:1,password:1,needPasswordChange:1})
+    const user = new Users()
+    const isExist = await user.isExist(id); // methods create on userSchema.ts
     if(!isExist){
       throw new apiError(httpStatus.NOT_FOUND,'user dose not exist')
     }
 
-    const isPasswordMatch = await bcrypt.compare(password,isExist?.password);
+    const isPasswordMatch = await user.isPasswordMatch(password,isExist?.password)
     if(!isPasswordMatch){
       throw new apiError(httpStatus.UNAUTHORIZED,"password is incorrect")
     }

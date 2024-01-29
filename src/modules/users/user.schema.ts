@@ -14,9 +14,14 @@ export interface iUser{
     admin?:Types.ObjectId   | iAdmin
 }
 
-type UserModel = Model<iUser, object>;
+type iUserMethod = {
+    isExist(id:string):Promise<Pick<iUser, keyof iUser> | null>,
+    isPasswordMatch(givenPass:string,savePass:string):Promise<boolean>
+}
 
-const userSchema = new Schema<iUser>({
+type UserModel = Model<iUser, object,iUserMethod>;
+
+const userSchema = new Schema<iUser,object,iUserMethod>({
     id:{
         type:String,
         unique:true
@@ -50,6 +55,14 @@ const userSchema = new Schema<iUser>({
 },{
     timestamps:true,
 })
+
+userSchema.methods.isExist = async function (id:string):Promise<Pick<iUser, keyof iUser> | null>{
+    const user = await Users.findOne({id},{id:1,password:1,needPasswordChange:1})
+    return user
+}
+userSchema.methods.isPasswordMatch = async function (givenPass:string, savePass:string ):Promise<boolean>{
+    return await bcrypt.compare(givenPass,savePass);
+}
 
 userSchema.pre('save',async function(next){
     this.password = await bcrypt.hash(this.password,12)
