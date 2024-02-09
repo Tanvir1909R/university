@@ -57,7 +57,7 @@ const userSchema = new Schema<iUser,object,iUserMethod>({
 })
 
 userSchema.methods.isExist = async function (id:string):Promise<Pick<iUser, keyof iUser> | null>{
-    const user = await Users.findOne({id},{id:1,password:1,needPasswordChange:1})
+    const user = await Users.findOne({id},{id:1,role:1,password:1,needPasswordChange:1})
     return user
 }
 userSchema.methods.isPasswordMatch = async function (givenPass:string, savePass:string ):Promise<boolean>{

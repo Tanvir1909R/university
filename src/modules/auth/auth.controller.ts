@@ -2,7 +2,8 @@ import { RequestHandler } from "express";
 import Users from "../users/user.schema";
 import apiError from "../../errors/apiError";
 import httpStatus from "http-status";
-import bcrypt from 'bcrypt'
+import  jwt, { Secret }  from "jsonwebtoken";
+import envConfig from "../../envConfig";
 
 export const loginUser: RequestHandler = async (req, res, next) => {
   try {
@@ -17,6 +18,29 @@ export const loginUser: RequestHandler = async (req, res, next) => {
     if(!isPasswordMatch){
       throw new apiError(httpStatus.UNAUTHORIZED,"password is incorrect")
     }
+
+    const accessToken = jwt.sign({
+      id:isExist?.id,
+      role:isExist?.role
+    },envConfig.jwt.secret as Secret,{
+      expiresIn:"1d"
+    })
+    const refreshToken = jwt.sign({
+      id:isExist?.id,
+      role:isExist?.role
+    },envConfig.jwt.refresh_secret as Secret,{
+      expiresIn:"365d"
+    })
+
+    res.status(httpStatus.OK).json({
+      success: true,
+      message: "login successfully",
+      data: {
+        accessToken,
+        refreshToken
+      },
+    });
+    
     
   } catch (error) {
     next(error);
