@@ -9,11 +9,13 @@ import studentRoute from './modules/student/student.route'
 import facultyRoute from './modules/faculty/faculty.route'
 import authRoute from './modules/auth/auth.route'
 import httpStatus from 'http-status'
+import cookieParser from 'cookie-parser'
 
 const app:Application = express()
 
 app.use(cors())
 app.use(express.json())
+app.use(cookieParser())
 app.use(express.urlencoded({extended:true}))
 
 
