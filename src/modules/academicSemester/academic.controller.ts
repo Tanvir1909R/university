@@ -40,27 +40,32 @@ export const createAcademicSemester: RequestHandler = async (
 export const getAcademicSemester: RequestHandler = async (req, res, next) => {
   try {
     // searching
-    const { search,...filterData } = pick(req.query, ["search","title","code"]);
-    const searchAbleField = ["title","code"]
+    const { search, ...filterData } = pick(req.query, [
+      "search",
+      "title",
+      "code",
+      "syncId"
+    ]);
+    const searchAbleField = ["title", "code"];
     const andCondition = [];
-    if(search){
+    if (search) {
       andCondition.push({
-        $or: searchAbleField.map((field)=>({
-          [field]:{
-            $regex:search,
-            $options:'i'
-          }
-        }))
-      })
+        $or: searchAbleField.map((field) => ({
+          [field]: {
+            $regex: search,
+            $options: "i",
+          },
+        })),
+      });
     }
-    if(Object.keys(filterData).length){
+    if (Object.keys(filterData).length) {
       andCondition.push({
-        $and:Object.entries(filterData).map(([field, value])=>({
-          [field]:value
-        }))
-      })
+        $and: Object.entries(filterData).map(([field, value]) => ({
+          [field]: value,
+        })),
+      });
     }
-    const findCondition = andCondition.length > 0 ? { $and: andCondition } : {}
+    const findCondition = andCondition.length > 0 ? { $and: andCondition } : {};
     // pagination
     const paginationOption = pick(req.query, filterFields);
     const { page, limit, skip, sortBy, sortOrder } =
@@ -91,48 +96,95 @@ export const getAcademicSemester: RequestHandler = async (req, res, next) => {
   }
 };
 
+export const getSingleSemester: RequestHandler = async (req, res, next) => {
+  try {
+    const id = req.params.id;
+    const result = await AcademicSemester.findById(id);
+    res.status(200).json({
+      success: true,
+      message: "Academic semester get successfully",
+      data: result,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
 
-export const getSingleSemester: RequestHandler = async(req,res,next)=>{
+export const updateAcademicSemester: RequestHandler = async (
+  req,
+  res,
+  next
+) => {
   try {
-      const id = req.params.id;
-      const result = await AcademicSemester.findById(id);
-      res.status(200).json({
-        success: true,
-        message: "Academic semester get successfully",
-        data: result,
-      });
+    const id = req.params.id;
+    const payload = req.body;
+    if (academicTitleCode[payload.title] !== payload.code) {
+      throw new apiError(httpStatus.BAD_REQUEST, "Invalid semester code");
+    }
+    const result = await AcademicSemester.findOneAndUpdate(
+      { _id: id },
+      payload,
+      { new: true }
+    );
+    res.status(200).json({
+      success: true,
+      message: "Academic semester update successfully",
+      data: result,
+    });
   } catch (error) {
-    next(error)
+    next(error);
   }
-}
+};
+export const deleteAcademicSemester: RequestHandler = async (
+  req,
+  res,
+  next
+) => {
+  try {
+    const id = req.params.id;
+    const result = await AcademicSemester.findOneAndDelete({ _id: id });
+    res.status(200).json({
+      success: true,
+      message: "Academic semester deleted successfully",
+      data: result,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
 
-export const updateAcademicSemester:RequestHandler = async(req,res,next)=>{
+// from events------------------------------------------
+export const createAcademicSemesterFromEvent = async (data:any) => {
   try {
-      const id = req.params.id;
-      const payload = req.body;
-      if (academicTitleCode[payload.title] !== payload.code) {
-        throw new apiError(httpStatus.BAD_REQUEST, "Invalid semester code");
-      }
-      const result = await AcademicSemester.findOneAndUpdate({_id:id},payload,{new:true})
-      res.status(200).json({
-        success: true,
-        message: "Academic semester update successfully",
-        data: result,
-      });
+    await AcademicSemester.create({
+      title:data.title,
+      code:data.code,
+      year: String(data.year),
+      startMonth:data.startMonth,
+      endMonth:data.endMonth,
+      syncId:data.id
+    });
+    console.log('semester create at mongo db');
+    
   } catch (error) {
-    next(error)
+    console.log(error);
   }
-}
-export const deleteAcademicSemester:RequestHandler = async(req,res,next)=>{
-  try {
-      const id = req.params.id;
-      const result = await AcademicSemester.findOneAndDelete({_id:id})
-      res.status(200).json({
-        success: true,
-        message: "Academic semester deleted successfully",
-        data: result,
-      });
-  } catch (error) {
-    next(error)
-  }
-}
+};
+
+export const updateAcademicSemesterFromEvent = async (
+  data:any
+): Promise<void> => {
+  await AcademicSemester.findOneAndUpdate(
+    { syncId: data.id },
+    {
+      $set: {
+        title: data.title,
+        year: data.title,
+        code: data.code,
+        startMonth: data.startMonth,
+        endMonth: data.endMonth,
+      },
+    }
+  );
+};
+

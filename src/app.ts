@@ -27,7 +27,7 @@ app.get('/',async (req:Request,res:Response)=>{
 
 app.use('/user',userRoute);
 app.use('/student',studentRoute )
-app.use('/academic',academicRoute)
+app.use('/semester',academicRoute)
 app.use('/faculty',academicFacultyRoute)
 app.use('/department',academicDepartmentRoute)
 app.use('/faculty-user', facultyRoute)

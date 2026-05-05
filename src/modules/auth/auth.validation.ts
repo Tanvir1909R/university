@@ -14,3 +14,14 @@ export const refreshTokenZodSchema = z.object({
     })
   })
 })
+
+export const passwordChangeZodSchema = z.object({
+  body:z.object({
+    oldPassword:z.string({
+      required_error:"Old password required"
+    }),
+    newPassword:z.string({
+      required_error:"New Password is required"
+    })
+  })
+})

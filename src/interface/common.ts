@@ -1,3 +1,7 @@
+import { Request } from "express"
+import { USER_ROLE } from "../enums/user"
+import { JwtPayload } from "jsonwebtoken"
+
 export interface iErrorResponse{
     statusCode:number,
     message:string,
@@ -12,4 +16,8 @@ export interface iPagination{
     limit?:number,
     sortBy?:string,
     sortOrder?:"asc" | "desc"
+}
+
+export interface tokenRequest extends Request{
+    user?:JwtPayload | string
 }

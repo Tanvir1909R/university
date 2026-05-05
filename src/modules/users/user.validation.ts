@@ -71,9 +71,9 @@ export const createStudentZodSchema = z.object({
         }),
       }),
       profileImg: z.string().optional(),
-      semester: z.string(),
-      department: z.string(),
-      faculty: z.string(),
+      academicSemester: z.string(),
+      academicDepartment: z.string(),
+      academicFaculty: z.string(),
     }),
   }),
 });
@@ -123,7 +123,7 @@ export const createAdminZodSchema = z.object({
         .optional(),
       designation: z.string(),
       managingDepartment: z.string(),
-      profileImage: z.string().optional(),
+      profileImg: z.string().optional(),
     }),
   }),
 });

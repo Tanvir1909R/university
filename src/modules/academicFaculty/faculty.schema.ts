@@ -1,14 +1,16 @@
 import { Schema, model } from "mongoose"
 
 interface iAcademicFaculty{
-    title:string
+    title:string,
+    syncId:string
 }
 
 const AcademicFacultySchema = new Schema({
     title:{
         type:String,
         require:true
-    }
+    },
+    syncId:String
 },{
     timestamps:true,
     toJSON:{

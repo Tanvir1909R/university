@@ -108,8 +108,8 @@ export const studentValidationZodSchema = z.object({
       })
       .optional(),
     profileImg: z.string().optional(),
-    semester: z.string().optional(),
-    department: z.string().optional(),
-    faculty: z.string().optional(),
+    academicSemester: z.string().optional(),
+    academicDepartment: z.string().optional(),
+    academicFaculty: z.string().optional(),
   }),
 });

@@ -25,7 +25,7 @@ export const getStudent: RequestHandler = async (req, res, next) => {
             $regex: search,
             $options: "i",
           },
-        })),
+        })),  
       });
     }
     if (Object.keys(filterData).length) {

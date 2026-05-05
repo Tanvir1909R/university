@@ -31,9 +31,9 @@ export type iStudent = {
       address: string,
   };
   profileImg?: string,
-  semester: Schema.Types.ObjectId,
-  department: Schema.Types.ObjectId,
-  faculty: Schema.Types.ObjectId,
+  academicSemester: Schema.Types.ObjectId,
+  academicDepartment: Schema.Types.ObjectId,
+  academicFaculty: Schema.Types.ObjectId,
   [key:string]:any // index signature if i have to use Object.keys or objectName[key] 
 };
 
@@ -148,17 +148,17 @@ const studentSchema = new Schema<iStudent>(
     profileImg: {
       type: String,
     },
-    semester: {
+    academicSemester: {
       type: Schema.Types.ObjectId,
       ref: "academicSemesters",
       required: true,
     },
-    department: {
+    academicDepartment: {
       type: Schema.Types.ObjectId,
       ref: "academicDepartments",
       required: true,
     },
-    faculty: {
+    academicFaculty: {
       type: Schema.Types.ObjectId,
       ref: "academicFaculties",
       required: true,

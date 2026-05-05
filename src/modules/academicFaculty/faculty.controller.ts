@@ -5,6 +5,7 @@ import pick from "../../pick";
 import { filterFields } from "../../utils/common";
 import calculatePagination from "../../helper/pagination.helper";
 import { SortOrder } from "mongoose";
+import { tokenRequest } from "../../interface/common";
 
 export const createFaculty: RequestHandler = async (req, res, next) => {
   try {
@@ -20,10 +21,12 @@ export const createFaculty: RequestHandler = async (req, res, next) => {
   }
 };
 
-export const findFaculty: RequestHandler = async (req, res, next) => {
+export const findFaculty: RequestHandler = async (req:tokenRequest, res, next) => {
   try {
+    console.log(req.user);
+    
     //search
-    const {search, ...filterData} = pick(req.query,["search","title"])
+    const {search, ...filterData} = pick(req.query,["search","title","syncId"])
     const searchAbleField = ["title"]
     const andCondition = [];
     if(search){
@@ -93,5 +96,19 @@ export const updateFaculty:RequestHandler = async(req,res,next)=>{
     });
   } catch (error) {
     next(error)
+  }
+}
+
+export const createAcademicFacultyFromEvent  = async(data:any)=>{
+  try {
+    await AcademicFaculty.create({
+      title:data.title,
+      syncId:data.id
+    })
+    console.log('faculty created');
+    
+  } catch (error) {
+    console.log(error);
+    
   }
 }

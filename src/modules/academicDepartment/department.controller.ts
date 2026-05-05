@@ -1,10 +1,12 @@
 import { RequestHandler } from "express";
-import { OK } from "http-status";
+import httpStatus, { OK } from "http-status";
 import pick from "../../pick";
 import { filterFields } from "../../utils/common";
 import calculatePagination from "../../helper/pagination.helper";
 import { SortOrder } from "mongoose";
 import AcademicDepartment from "./department.schema";
+import AcademicFaculty from "../academicFaculty/faculty.schema";
+import apiError from "../../errors/apiError";
 
 export const createDepartment: RequestHandler = async (req, res, next) => {
   try {
@@ -23,7 +25,7 @@ export const createDepartment: RequestHandler = async (req, res, next) => {
 export const findDepartment: RequestHandler = async (req, res, next) => {
   try {
     //search
-    const {search, ...filterData} = pick(req.query,["search","title"])
+    const {search, ...filterData} = pick(req.query,["search","title","syncId"])
     const searchAbleField = ["title"]
     const andCondition = [];
     if(search){
@@ -53,7 +55,7 @@ export const findDepartment: RequestHandler = async (req, res, next) => {
     if(sortOrder && sortBy){
       sortOrderFaculty[sortBy] = sortOrder
     }
-    const result = await AcademicDepartment.find(findCondition).populate('faculty').sort(sortOrderFaculty).skip(skip).limit(limit);
+    const result = await AcademicDepartment.find(findCondition).populate('academicFaculty').sort(sortOrderFaculty).skip(skip).limit(limit);
     res.status(OK).json({
       success: true,
       message: "data get successfully",
@@ -93,5 +95,26 @@ export const updateDepartment:RequestHandler = async(req,res,next)=>{
     });
   } catch (error) {
     next(error)
+  }
+}
+
+//--------------------- event
+export const createAcademicDepartmentFromEvent = async (data:any)=>{
+  try {
+    console.log(data);
+    const Faculty = await AcademicFaculty.findOne({
+      syncId: data.academicFacultyId
+    })
+    if(!Faculty){
+      throw new apiError(httpStatus.BAD_REQUEST,"academic faculty not found")
+    }
+    await AcademicDepartment.create({
+      title:data.title,
+      academicFaculty:Faculty!._id,
+      syncId:data.id
+    })
+  } catch (error) {
+    console.log(error);
+    
   }
 }

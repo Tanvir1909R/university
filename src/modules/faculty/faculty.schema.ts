@@ -15,8 +15,8 @@ export interface iFaculty {
   presentAddress: string,
   bloodGroup?: "A+" | "B+" | "AB+" | "O+" | "A-" | "B-" | "AB-" | "O-",
   designation: string,
-  department: Schema.Types.ObjectId,
-  faculty: Schema.Types.ObjectId,
+  academicDepartment: Schema.Types.ObjectId,
+  academicFaculty: Schema.Types.ObjectId,
   profileImage?: string,
   [key:string]:any // index
 }
@@ -73,12 +73,12 @@ const facultySchema = new Schema<iFaculty>({
     type: String,
     required: true,
   },
-  department: {
+  academicDepartment: {
     type: Schema.Types.ObjectId,
     required: true,
     ref: "academicDepartments",
   },
-  faculty: {
+  academicFaculty: {
     type: Schema.Types.ObjectId,
     required: true,
     ref: "academicFaculties",

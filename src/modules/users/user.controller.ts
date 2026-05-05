@@ -15,7 +15,7 @@ export const createsStudent: RequestHandler = async (req, res, next) => {
   try {
     const { student, ...user } = req.body;
     user.role = "student";
-    const academicSemester = await AcademicSemester.findById(student.semester);
+    const academicSemester = await AcademicSemester.findById(student.academicSemester);
     const session = await mongoose.startSession();
     let newUserAllData = null;
     try {
@@ -48,9 +48,9 @@ export const createsStudent: RequestHandler = async (req, res, next) => {
       newUserAllData = await Users.findOne({ id: newUserAllData.id }).populate({
         path: "student",
         populate: [
-          { path: "semester" },
-          { path: "department" },
-          { path: "faculty" },
+          { path: "academicSemester" },
+          { path: "academicDepartment" },
+          { path: "academicFaculty" },
         ],
       });
     }

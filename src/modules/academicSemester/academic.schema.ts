@@ -1,6 +1,7 @@
 import { Model, Schema, model } from "mongoose";
 import apiError from "../../errors/apiError";
 import status from 'http-status'
+import { string } from "zod";
 
 type Month =
   | "January"
@@ -18,8 +19,9 @@ type Month =
 
 const month = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 
-interface iAcademic {
+export interface iAcademic {
   title: "autumn" | "summer" | "fall";
+  syncId:string
   code: "01" | "02" | "03";
   year: string;
   startMonth: Month;
@@ -34,6 +36,10 @@ const academicSemesterSchema = new Schema(
       type: String,
       require: true,
       enum:["autumn", "summer", "fall"]
+    },
+    syncId:{
+      type:String,
+      require:true
     },
     code: {
       type: String,

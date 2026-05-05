@@ -2,7 +2,8 @@ import { Schema, model } from "mongoose"
 
 interface iAcademicDepartment{
     title:string,
-    faculty:Schema.Types.ObjectId
+    academicFaculty:Schema.Types.ObjectId,
+    syncId:string
 }
 
 const AcademicDepartmentSchema = new Schema({
@@ -11,9 +12,13 @@ const AcademicDepartmentSchema = new Schema({
         require:true,
         unique:true
     },
-    faculty:{
+    academicFaculty:{
         type:Schema.Types.ObjectId,
         ref:"academicFaculties",
+        require:true
+    },
+    syncId:{
+        type:String,
         require:true
     }
 },{
